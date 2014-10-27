@@ -27,6 +27,7 @@ import android.util.Log;
 // TODO: たぶん速度的に遅いはず。ループ部分は外に出してしまうことも考えるべきか.
 // TODO: chunk 構造で再帰のほうがいいかも. 元の仕様からでは正直任意の chunk が組合せるとは読みとれなかったのでとりあえずこれで。
 // TODO: これ automaton で C つかったほうがいいかも。
+@Deprecated
 public class MetaseqParser {
 
     enum MODE {
