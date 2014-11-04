@@ -9,16 +9,16 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-import org.zaregoto.examples.android.miku.parser.mqo.MetaseqData;
-import org.zaregoto.examples.android.miku.parser.mqo.MetaseqObject;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
+import org.zaregoto.mqoparser.model.MetaseqData;
+import org.zaregoto.mqoparser.model.MetaseqObject;
 
 public class MQORenderer implements Renderer {
 
 	private Context mContext = null;
-	private MetaseqData data = null;	
+	private MetaseqData data = null;
 	private int mWidth = -1;
 	private int mHeight = -1;
 	private int vbo[];

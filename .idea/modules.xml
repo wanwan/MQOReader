@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MQOReader.iml" filepath="$PROJECT_DIR$/MQOReader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../mqoparser/mqoparser.iml" filepath="$PROJECT_DIR$/../mqoparser/mqoparser.iml" />
+    </modules>
+  </component>
+</project>
+
