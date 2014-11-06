@@ -3,7 +3,11 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../mqoparser/libs/commons-cli-1.2/commons-cli-1.2.jar!/" />
     </CLASSES>
-    <JAVADOC />
-    <SOURCES />
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../mqoparser/libs/commons-cli-1.2/commons-cli-1.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../mqoparser/libs/commons-cli-1.2/commons-cli-1.2-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

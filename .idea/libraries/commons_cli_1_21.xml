@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="commons-cli-1.21">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../mqoparser/libs/commons-cli-1.2/commons-cli-1.2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../mqoparser/libs/commons-cli-1.2/commons-cli-1.2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../mqoparser/libs/commons-cli-1.2/commons-cli-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
