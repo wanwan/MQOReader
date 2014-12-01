@@ -4,3 +4,5 @@
 *.o
 *.class
 bin/
+
+.DS_Store
