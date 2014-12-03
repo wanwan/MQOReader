@@ -69,7 +69,7 @@
              - customize it to your needs.
          - Customize the whole script.
              - copy/paste the content of the rules files (minus the top node)
-               into this file, *after* the <setup> task
+               into this file, *postTransfer* the <setup> task
              - disable the import of the rules by changing the setup task
                below to <setup import="false" />.
              - customize to your needs.
