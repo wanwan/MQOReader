@@ -12,20 +12,20 @@ import javax.microedition.khronos.opengles.GL11;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
-import org.zaregoto.mqoparser.model.MetaseqData;
-import org.zaregoto.mqoparser.model.MetaseqObject;
+import org.zaregoto.mqoparser.model.MQOData;
+import org.zaregoto.mqoparser.model.MQOObject;
 
 public class MQORenderer implements Renderer {
 
 	private Context mContext = null;
-	private MetaseqData data = null;
+	private MQOData data = null;
 	private int mWidth = -1;
 	private int mHeight = -1;
 	private int vbo[];
 
 	private static final int baseOrtho = 120;
 	
-	public MQORenderer(Context mContext, MetaseqData data) {
+	public MQORenderer(Context mContext, MQOData data) {
 		this.setmContext(mContext);
 		this.setData(data);
 		return;
@@ -67,9 +67,9 @@ public class MQORenderer implements Renderer {
 
 		GL11 gl = (GL11)gl10;		
 		
-		ArrayList<MetaseqObject> objects = null;
-		Iterator<MetaseqObject> it = null;
-		MetaseqObject object = null;
+		ArrayList<MQOObject> objects = null;
+		Iterator<MQOObject> it = null;
+		MQOObject object = null;
 		FloatBuffer fb = null;
 		
 //		if (data != null && null != gl) {
@@ -169,11 +169,11 @@ public class MQORenderer implements Renderer {
 		return mContext;
 	}
 
-	public void setData(MetaseqData data) {
+	public void setData(MQOData data) {
 		this.data = data;
 	}
 
-	public MetaseqData getData() {
+	public MQOData getData() {
 		return data;
 	}
 
