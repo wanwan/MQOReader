@@ -1,17 +1,17 @@
 package org.zaregoto.examples.android.miku;
 
-import java.io.*;
-
-import android.content.Context;
-import org.zaregoto.examples.android.miku.parser.mqo.MetaseqData;
-import org.zaregoto.examples.android.miku.parser.mqo.MetaseqParser;
-
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import org.zaregoto.examples.android.miku.parser.mqo.Parser;
+import org.zaregoto.mqoparser.model.MQOData;
+import org.zaregoto.mqoparser.parser.MQOParser;
+import org.zaregoto.mqoparser.parser.exception.LoadStateException;
+import org.zaregoto.mqoparser.parser.exception.StateTransferException;
+import org.zaregoto.mqoparser.util.LogUtil;
+
+import java.io.*;
 
 public class DancingMikuActivity extends Activity {
 	
@@ -31,22 +31,8 @@ public class DancingMikuActivity extends Activity {
             e.printStackTrace();
         }
 
-        Parser parser = null;
-		parser = new Parser();
-        try {
-            File path = getFileStreamPath(SAMPLEFILE);
-            parser.open(path.getAbsolutePath());
-            parser.parse();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try { parser.close(); } catch (IOException e) { e.printStackTrace(); }
-        }
-
-
-        MQORenderer renderer = new MQORenderer(this, null);
+        //MQORenderer renderer = new MQORenderer(this, null);
+        MQORenderer renderer = new MQORenderer();
         
         GLSurfaceView glSurfaceView = new GLSurfaceView(this);
         glSurfaceView.setRenderer(renderer);
@@ -82,6 +68,31 @@ public class DancingMikuActivity extends Activity {
         }
 
         return;
+    }
+
+
+    private MQOData readData(String filename) throws IOException, StateTransferException {
+
+        MQOParser parser = new MQOParser();
+        MQOData data = null;
+        try {
+            parser.open(filename);
+
+            data = parser.parse();
+
+            LogUtil.d(data.toString());
+
+        } catch (LoadStateException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                parser.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return data;
     }
 
 }
