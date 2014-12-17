@@ -1,4 +1,4 @@
-package org.zaregoto.examples.android.miku;
+package org.zaregoto.examples.android.miku.view;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;

@@ -4,10 +4,9 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView 
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="Hello World, DancingMikuActivity"
-    />
+    <view android:layout_width="fill_parent"
+          android:layout_height="fill_parent"
+          class="org.zaregoto.examples.android.miku.view.MQOView" android:id="@+id/view"
+          android:layout_gravity="right"/>
 </LinearLayout>
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import org.zaregoto.examples.android.miku.view.MQORenderer;
 import org.zaregoto.mqoparser.model.MQOData;
 import org.zaregoto.mqoparser.parser.MQOParser;
 import org.zaregoto.mqoparser.parser.exception.LoadStateException;
