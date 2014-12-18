@@ -7,6 +7,16 @@
     <view android:layout_width="fill_parent"
           android:layout_height="fill_parent"
           class="org.zaregoto.examples.android.miku.view.MQOView" android:id="@+id/view"
-          android:layout_gravity="right"/>
+          android:layout_gravity="right" android:layout_weight="1"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/openBtnLable"
+                android:id="@+id/button"/>
+    </LinearLayout>
 </LinearLayout>
 
