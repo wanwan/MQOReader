@@ -4,16 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <fragment android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:name="android.app.DialogFragment" android:id="@+id/fragment" android:layout_gravity="right"
-              tools:layout="@layout/filelist"/>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-    </LinearLayout>
-    <fragment android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:name="android.app.ListFragment" android:id="@+id/fragment2"/>
+    <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/file_list_root"/>
 </LinearLayout>

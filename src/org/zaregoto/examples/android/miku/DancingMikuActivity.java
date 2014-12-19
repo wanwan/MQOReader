@@ -1,6 +1,9 @@
 package org.zaregoto.examples.android.miku;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
@@ -44,7 +47,7 @@ public class DancingMikuActivity extends Activity {
             e.printStackTrace();
         }
 
-        ArrayList<File> mqos = new ArrayList<File>();
+        final ArrayList<File> mqos = new ArrayList<File>();
         fileSearch(getCacheDir(), ".*.mqo", mqos);
 
         Iterator<File> it = mqos.iterator();
@@ -59,6 +62,7 @@ public class DancingMikuActivity extends Activity {
             openBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    showFileSelectDialog(mqos);
                 }
             });
         }
@@ -69,7 +73,8 @@ public class DancingMikuActivity extends Activity {
         GLSurfaceView glSurfaceView = new GLSurfaceView(this);
         glSurfaceView.setRenderer(renderer);
         
-        setContentView(glSurfaceView);
+        //setContentView(glSurfaceView);
+        setContentView(R.layout.main);
     }
 
 
@@ -167,6 +172,26 @@ public class DancingMikuActivity extends Activity {
                 }
             }
         }
+    }
+
+
+    int mStackLevel = 0;
+    void showFileSelectDialog(ArrayList<File> files) {
+        //mStackLevel++;
+
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = FileSelectDialogFragment.newInstance(mStackLevel, files);
+        newFragment.show(ft, "dialog");
     }
 
 }
