@@ -64,6 +64,14 @@ public class FileSelectDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.filelist, container, false);
+        ListView lv = (ListView) v.findViewById(R.id.file_list_root);
+
+        //ArrayAdapter<File> adapter = new ArrayAdapter<File>(getActivity(), android.R.layout.simple_list_item_1, mFiles);
+        FileSelectAdapter adapter = new FileSelectAdapter(getActivity(), R.layout.filelistitem, mFiles);
+
+        lv.setAdapter(adapter);
+
+
 
         return v;
     }
@@ -71,13 +79,5 @@ public class FileSelectDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        View v = getView();
-        ListView lv = (ListView) v.findViewById(R.id.file_list_root);
-
-        ArrayAdapter<File> adapter = new ArrayAdapter<File>(activity, android.R.layout.simple_list_item_1, mFiles);
-
-        lv.setAdapter(adapter);
-
     }
 }

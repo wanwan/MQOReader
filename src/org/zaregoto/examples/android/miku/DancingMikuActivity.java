@@ -56,17 +56,6 @@ public class DancingMikuActivity extends Activity {
             System.out.println("mqofile: " + f.getAbsolutePath());
         }
 
-
-        Button openBtn = (Button) findViewById(R.id.button);
-        if (null != openBtn) {
-            openBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFileSelectDialog(mqos);
-                }
-            });
-        }
-
         //MQORenderer renderer = new MQORenderer(this, null);
         MQORenderer renderer = new MQORenderer();
         
@@ -75,6 +64,16 @@ public class DancingMikuActivity extends Activity {
         
         //setContentView(glSurfaceView);
         setContentView(R.layout.main);
+
+        Button openBtn = (Button) findViewById(R.id.openBtn);
+        if (null != openBtn) {
+            openBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showFileSelectDialog(mqos);
+                }
+            });
+        }
     }
 
 
@@ -190,7 +189,7 @@ public class DancingMikuActivity extends Activity {
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DialogFragment newFragment = FileSelectDialogFragment.newInstance(mStackLevel, files);
+        DialogFragment newFragment = FileSelectDialogFragment.newInstance(DialogFragment.STYLE_NO_FRAME, files);
         newFragment.show(ft, "dialog");
     }
 
