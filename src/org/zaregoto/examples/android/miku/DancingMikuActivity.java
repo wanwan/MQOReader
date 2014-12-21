@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import org.zaregoto.examples.android.miku.view.MQORenderer;
 import org.zaregoto.mqoparser.model.MQOData;
 import org.zaregoto.mqoparser.parser.MQOParser;
@@ -29,7 +30,9 @@ public class DancingMikuActivity extends Activity implements FileSelectDialogFra
 	
     private static final int BUFSIZE = 2048;
     private static final String[] ASSETS_DATA_FOLDER = {"primitive", "medaka", "hachune"};
-	
+
+    private DialogFragment fileSelectDialog;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,7 @@ public class DancingMikuActivity extends Activity implements FileSelectDialogFra
             openBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showFileSelectDialog(mqos);
+                    fileSelectDialog = showFileSelectDialog(mqos);
                 }
             });
         }
@@ -175,7 +178,7 @@ public class DancingMikuActivity extends Activity implements FileSelectDialogFra
 
 
     int mStackLevel = 0;
-    void showFileSelectDialog(ArrayList<File> files) {
+    DialogFragment showFileSelectDialog(ArrayList<File> files) {
         //mStackLevel++;
 
         // DialogFragment.show() will take care of adding the fragment
@@ -191,10 +194,19 @@ public class DancingMikuActivity extends Activity implements FileSelectDialogFra
         // Create and show the dialog.
         DialogFragment newFragment = FileSelectDialogFragment.newInstance(DialogFragment.STYLE_NO_FRAME, files);
         newFragment.show(ft, "dialog");
+        return newFragment;
     }
 
     @Override
     public void fileSelected(File f) {
-
+        TextView statusLabel = (TextView) findViewById(R.id.statusLbl);
+        if (null != statusLabel) {
+            statusLabel.setText(f.getName());
+            statusLabel.invalidate();
+        }
+        if (null != fileSelectDialog) {
+            fileSelectDialog.dismiss();
+            fileSelectDialog = null;
+        }
     }
 }

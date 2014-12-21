@@ -70,12 +70,17 @@ public class FileSelectDialogFragment extends DialogFragment {
         final FileSelectAdapter adapter = new FileSelectAdapter(getActivity(), R.layout.filelistitem, mFiles);
 
         lv.setAdapter(adapter);
-        lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File selected = (File) adapter.getItem(position);
                 FileSelect selectIf = (FileSelect) getActivity();
                 selectIf.fileSelected(selected);
+            }
+        });
+        lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             }
 
             @Override
