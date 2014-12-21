@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DancingMikuActivity extends Activity {
+public class DancingMikuActivity extends Activity implements FileSelectDialogFragment.FileSelect {
 	
     private static final int BUFSIZE = 2048;
     private static final String[] ASSETS_DATA_FOLDER = {"primitive", "medaka", "hachune"};
@@ -193,4 +193,8 @@ public class DancingMikuActivity extends Activity {
         newFragment.show(ft, "dialog");
     }
 
+    @Override
+    public void fileSelected(File f) {
+
+    }
 }

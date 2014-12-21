@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
@@ -67,10 +67,22 @@ public class FileSelectDialogFragment extends DialogFragment {
         ListView lv = (ListView) v.findViewById(R.id.file_list_root);
 
         //ArrayAdapter<File> adapter = new ArrayAdapter<File>(getActivity(), android.R.layout.simple_list_item_1, mFiles);
-        FileSelectAdapter adapter = new FileSelectAdapter(getActivity(), R.layout.filelistitem, mFiles);
+        final FileSelectAdapter adapter = new FileSelectAdapter(getActivity(), R.layout.filelistitem, mFiles);
 
         lv.setAdapter(adapter);
+        lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                File selected = (File) adapter.getItem(position);
+                FileSelect selectIf = (FileSelect) getActivity();
+                selectIf.fileSelected(selected);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         return v;
@@ -80,4 +92,10 @@ public class FileSelectDialogFragment extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }
+
+    public interface FileSelect {
+        public void fileSelected(File f);
+    }
+
+
 }
