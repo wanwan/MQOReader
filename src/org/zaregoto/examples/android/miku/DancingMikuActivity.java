@@ -209,4 +209,28 @@ public class DancingMikuActivity extends Activity implements FileSelectDialogFra
             fileSelectDialog = null;
         }
     }
+
+
+    private MQOData parseMQO(File mqoFile) {
+        MQOParser parser;
+        MQOData data = null;
+
+        if (null != mqoFile && mqoFile.exists()) {
+            parser = new MQOParser();
+            try {
+                parser.open(mqoFile.getAbsolutePath());
+                data = parser.parse();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (LoadStateException e) {
+                e.printStackTrace();
+            } catch (StateTransferException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return data;
+    }
 }
