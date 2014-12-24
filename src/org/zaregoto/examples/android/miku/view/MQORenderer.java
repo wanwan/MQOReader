@@ -11,29 +11,151 @@ import javax.microedition.khronos.opengles.GL11;
 
 
 import android.content.Context;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.opengl.Matrix;
+import android.util.Log;
 import org.zaregoto.mqoparser.model.MQOData;
 import org.zaregoto.mqoparser.model.MQOObject;
 
 public class MQORenderer implements GLSurfaceView.Renderer {
 
+    private final String VSHADER_SRC =
+            "attribute vec4 aPosition;\n" +
+                    "attribute vec2 aUV;\n" +
+                    "uniform mat4 uProjection;\n" +
+                    "uniform mat4 uView;\n" +
+                    "uniform mat4 uModel;\n" +
+                    "varying vec2 vUV;\n" +
+                    "void main() {\n" +
+                    "  gl_Position = uProjection * uView * uModel * aPosition;\n" +
+                    "  vUV = aUV;\n" +
+                    "}\n";
+
+    private final String FSHADER_SRC =
+            "precision mediump float;\n" +
+                    "varying vec2 vUV;\n" +
+                    "uniform sampler2D uTex;\n" +
+                    "void main() {\n" +
+                    "  gl_FragColor = texture2D(uTex, vUV);\n" +
+                    "}\n";
+
+
 	private Context mContext = null;
 	private MQOData data = null;
 
+    private static final float Z_NEAR = 0.1f;
+    private static final float Z_FAR = 100.0f;
+    private float mScreenAspectRatio;
+
+
+    private float mCameraPosX = 0.0f;
+    private float mCameraPosY = 0.0f;
+    private float mCameraPosZ = 0.0f;
+
+    private float mCameraDirectionX = 0.0f;
+    private float mCameraDirectionY = 0.0f;
+    private float mCameraDirectionZ = 1.0f;
+
+    private float mCameraFovDegree = 45;
+
+
+    private int mPositionHandle;
+    private int mProjectionMatrixHandle;
+    private int mViewMatrixHandle;
+    private int mUVHandle;
+    private int mTexHandle;
+    private int mModelMatrixHandle;
+
+    private final float[] mProjectionMatrix = new float[16];
+    private final float[] mViewMatrix = new float[16];
+    private final float[] mModelMatrix = new float[16];
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+
+        int vShader;
+        int fShader;
+        int program;
+
+        vShader = loadShader(GLES20.GL_VERTEX_SHADER, VSHADER_SRC);
+        fShader = loadShader(GLES20.GL_FRAGMENT_SHADER, FSHADER_SRC);
+
+        program = GLES20.glCreateProgram();
+        GLES20.glAttachShader(program, vShader);
+        GLES20.glAttachShader(program, fShader);
+        GLES20.glLinkProgram(program);
+
+        GLES20.glUseProgram(program);
+
+        mPositionHandle = GLES20.glGetAttribLocation(program, "aPosition");
+        mUVHandle = GLES20.glGetAttribLocation(program, "aUV");
+        mProjectionMatrixHandle = GLES20.glGetUniformLocation(program, "uProjection");
+        mViewMatrixHandle = GLES20.glGetUniformLocation(program, "uView");
+        mTexHandle = GLES20.glGetUniformLocation(program, "uTex");
+        mModelMatrixHandle = GLES20.glGetUniformLocation(program, "uModel");
+
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
 
+        int _height = height/2;
+        mScreenAspectRatio = (float) width / (float) (_height == 0 ? 1 : _height);
+
+        GLES20.glViewport(0, _height / 2, width, _height);
+
+        Matrix.setLookAtM(mViewMatrix, 0, mCameraPosX, mCameraPosY, mCameraPosZ, mCameraDirectionX, mCameraDirectionY, mCameraDirectionZ, 0.0f, 1.0f, 0.0f);
+        Matrix.perspectiveM(mProjectionMatrix, 0, mCameraFovDegree, mScreenAspectRatio, Z_NEAR, Z_FAR);
+
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
+
+//        mCameraDirectionX = (float) (Math.cos(mRotationAngleXZ)*Math.cos(mRotationAngleY));
+//        mCameraDirectionZ = (float) (Math.sin(mRotationAngleXZ)*Math.cos(mRotationAngleY));
+//        mCameraDirectionY = (float) Math.sin(mRotationAngleY);
+
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.setIdentityM(mViewMatrix, 0);
+        Matrix.setIdentityM(mProjectionMatrix, 0);
+
+//        if (mTextureUpdate && null != mTexture && !mTexture.getPhoto().isRecycled()) {
+//            Log.d("", "load texture1");
+//            loadTexture(mTexture.getPhoto());
+//            mTexture.getPhoto().recycle();
+//            mTextureUpdate = false;
+//        }
+
+        Matrix.setLookAtM(mViewMatrix, 0, mCameraPosX, mCameraPosY, mCameraPosZ, mCameraDirectionX, mCameraDirectionY, mCameraDirectionZ, 0.0f, 1.0f, 0.0f);
+        Matrix.perspectiveM(mProjectionMatrix, 0, mCameraFovDegree, mScreenAspectRatio, Z_NEAR, Z_FAR);
+
+
+//        if (null != mTexture.getElevetionAngle()) {
+//            float elevationAngle = mTexture.getElevetionAngle().floatValue();
+//            Matrix.rotateM(mModelMatrix, 0, (float) elevationAngle, 0, 0, 1);
+//        }
+//        if (null != mTexture.getHorizontalAngle()) {
+//            float horizontalAngle = mTexture.getHorizontalAngle().floatValue();
+//            Matrix.rotateM(mModelMatrix, 0, horizontalAngle, 1, 0, 0);
+//        }
+
+        GLES20.glUniformMatrix4fv(mModelMatrixHandle, 1, false, mModelMatrix, 0);
+        GLES20.glUniformMatrix4fv(mProjectionMatrixHandle, 1, false, mProjectionMatrix, 0);
+        GLES20.glUniformMatrix4fv(mViewMatrixHandle, 1, false, mViewMatrix, 0);
+
+//        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+//        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,mTextures[0]);
+//        GLES20.glUniform1i(mTexHandle,0);
+
+//        mShell.draw(mPositionHandle, mUVHandle);
+
 
     }
 
@@ -195,5 +317,32 @@ public class MQORenderer implements GLSurfaceView.Renderer {
 //	public MQOData getData() {
 //		return data;
 //	}
+
+
+    /**
+     * デバッグ用 GL エラー判定メソッド
+     * @param TAG TAG 出力文字列
+     * @param glOperation メッセージ出力文字列
+     */
+    private static void checkGlError(String TAG, String glOperation) {
+        int error;
+        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+            Log.e(TAG, glOperation + ": glError " + error);
+            throw new RuntimeException(glOperation + ": glError " + error);
+        }
+        return;
+    }
+
+
+    private int loadShader(int type, String shaderCode){
+
+        int shader = GLES20.glCreateShader(type);
+
+        GLES20.glShaderSource(shader, shaderCode);
+        GLES20.glCompileShader(shader);
+
+        return shader;
+    }
+
 
 }

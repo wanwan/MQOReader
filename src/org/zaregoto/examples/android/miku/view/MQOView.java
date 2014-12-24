@@ -14,6 +14,9 @@ public class MQOView extends GLSurfaceView {
     public MQOView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+
+        setEGLContextClientVersion(2);
+
         MQORenderer renderer = new MQORenderer();
         setRenderer(renderer);
     }

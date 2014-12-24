@@ -127,12 +127,12 @@ public class DancingMikuActivity extends Activity implements FileSelectDialogFra
     }
 
 
-    private MQOData readData(String filename) throws IOException, StateTransferException {
+    private MQOData readData(File file) throws IOException, StateTransferException {
 
         MQOParser parser = new MQOParser();
         MQOData data = null;
         try {
-            parser.open(filename);
+            parser.open(file);
 
             data = parser.parse();
 
@@ -199,7 +199,10 @@ public class DancingMikuActivity extends Activity implements FileSelectDialogFra
 
     @Override
     public void fileSelected(File f) {
+
         TextView statusLabel = (TextView) findViewById(R.id.statusLbl);
+        MQOData data = null;
+
         if (null != statusLabel) {
             statusLabel.setText(f.getName());
             statusLabel.invalidate();
@@ -208,6 +211,20 @@ public class DancingMikuActivity extends Activity implements FileSelectDialogFra
             fileSelectDialog.dismiss();
             fileSelectDialog = null;
         }
+
+        if (null != f && f.exists()) {
+            try {
+                data = readData(f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (StateTransferException e) {
+                e.printStackTrace();
+            }
+
+            if (null != data) {
+            }
+        }
+
     }
 
 
