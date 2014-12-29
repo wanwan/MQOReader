@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.zip.DataFormatException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -71,6 +72,8 @@ public class MQORenderer implements GLSurfaceView.Renderer {
     private final float[] mProjectionMatrix = new float[16];
     private final float[] mViewMatrix = new float[16];
     private final float[] mModelMatrix = new float[16];
+
+    private int indexCount;
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -155,6 +158,8 @@ public class MQORenderer implements GLSurfaceView.Renderer {
 //        GLES20.glUniform1i(mTexHandle,0);
 
 //        mShell.draw(mPositionHandle, mUVHandle);
+
+        GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, indexCount, GLES20.GL_UNSIGNED_SHORT, 0);
 
 
     }
@@ -317,6 +322,47 @@ public class MQORenderer implements GLSurfaceView.Renderer {
 //	public MQOData getData() {
 //		return data;
 //	}
+
+    private final int[] vbo = new int[1];
+    private final int[] ibo = new int[1];
+
+    private static final int BYTES_PER_FLOAT = 4;
+    private static final int BYTES_PER_SHORT = 2;
+
+    public void loadData(MQOData data, String objName) {
+
+        MQOObject obj;
+
+        if (null != data) {
+            obj = data.getObject(objName);
+
+            GLES20.glGenBuffers(1, vbo, 0);
+            GLES20.glGenBuffers(1, ibo, 0);
+
+            FloatBuffer fb = obj.generateVertexBuffer();
+            ShortBuffer sb = null;
+            try {
+                sb = obj.generateIndexBuffer();
+            } catch (DataFormatException e) {
+                e.printStackTrace();
+            }
+
+            if (vbo[0] > 0 && ibo[0] > 0) {
+                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo[0]);
+                GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, fb.capacity() * BYTES_PER_FLOAT, fb, GLES20.GL_STATIC_DRAW);
+
+                GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, ibo[0]);
+                GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, sb.capacity() * BYTES_PER_SHORT, sb, GLES20.GL_STATIC_DRAW);
+                indexCount = sb.capacity();
+
+                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+                GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
+            }
+            else {
+                // TODO:
+            }
+        }
+    }
 
 
     /**
